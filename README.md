@@ -1,2 +1,1 @@
-# sprachdialogsysteme_exercises
-Sprachdialogsysteme Übungen
+# Sprachdialogsysteme Übungen
