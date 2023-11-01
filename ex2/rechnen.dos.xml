@@ -8,8 +8,8 @@
 		<att name="language" type="string" value="de_DE"/>
 	</plugin>
 	<graph directed="1" Graphic="1" Layout="points">
-		<att name="width" type="integer" value="1599"/>
-		<att name="height" type="integer" value="1307"/>
+		<att name="width" type="integer" value="2317"/>
+		<att name="height" type="integer" value="1311"/>
 		<script>
 			<name>wortInZahlUmwandeln</name>
 			<value>any wortZuZahl(any wort) {
@@ -27,76 +27,60 @@
    if (wort == &quot;zehn&quot;) return 10;
    if (wort == &quot;hundert&quot;) return 100;
    if (wort == &quot;tausend&quot;) return 1000;
+   return 0;
 }</value>
 		</script>
 		<groovyFunctions></groovyFunctions>
 		<grammar id="73210038-15e7-449e-a82e-babc4d7f885b">
 			<name>rechnen</name>
-			<value>root $rechnung;
-$rechnung = $zahl | $zahl $operator $rechnung;
-$zahl = &quot;eins&quot; {$=1} | &quot;zwei&quot; {$=2} | &quot;drei&quot; {$=3} | &quot;vier&quot; {$=4} | &quot;fünf&quot; {$=5}| &quot;sechs&quot; {$=6} | &quot;sieben&quot; {$=7} | &quot;acht&quot; {$=8} | &quot;neun&quot; {$=9} | &quot;zehn&quot; {$=10};
-$zahlA = $zahl {$=$zahl};
-$zahlB = $zahl {$=$zahl};
-$operator = &quot;plus&quot; | &quot;minus&quot;;</value>
+			<value>root $calc;
+$calc = $zahl {$=$zahl} | ($zahl plus $calc) {$ = $zahl + $calc} | ($zahl minus $calc) {$ = $zahl - $calc};
+$zahl = &quot;eins&quot; {$=1} | &quot;zwei&quot; {$=2} | &quot;drei&quot; {$=3} | &quot;vier&quot; {$=4} | &quot;fünf&quot; {$=5}| &quot;sechs&quot; {$=6} | &quot;sieben&quot; {$=7} | &quot;acht&quot; {$=8} | &quot;neun&quot; {$=9} | &quot;zehn&quot; {$=10};</value>
 		</grammar>
 		<variable uid="4b326119-f5fd-44fc-a992-7a75410da617">
 			<name>ergebnistext</name>
-			<type>string</type>
+			<type>int</type>
 			<value>&quot;&quot;</value>
 		</variable>
-		<node uid="0b535701-f41e-40c2-99a4-f3c663479fba" class="de.saar.coli.dialogos.marytts.plugin.TTSNode">
-			<graphics x="320" y="103" fill="#00b200"/>
-			<att name="title" type="string" value="Sprachsynthese"/>
-			<att name="voice" type="string" value="bits3-hsmm"/>
-			<att name="prompt" type="text">
-				<value>Sag mir eine Rächen-Aufgabe.</value>
-			</att>
-			<att name="prompt_type" type="string" value="text"/>
-			<att name="wait" type="boolean" value="1"/>
-			<att name="await_silence" type="boolean" value="0"/>
-		</node>
-		<node uid="6dabc14a-7927-42fc-9d19-84b883c9ca78" class="com.clt.diamant.graph.nodes.EndNode">
-			<graphics x="351" y="585" fill="#9999ff"/>
+		<node uid="2aefcc6b-d33e-49bf-9039-a34ad68eb3b4" class="com.clt.diamant.graph.nodes.EndNode">
+			<graphics x="354" y="577" fill="#9999ff"/>
 			<att name="title" type="string" value="Ende"/>
 		</node>
 		<node uid="9f21c42f-906d-4cf7-99d3-92c28fa73982" class="edu.cmu.lti.dialogos.sphinx.plugin.SphinxNode">
-			<graphics x="331" y="196" fill="#b20000"/>
+			<graphics x="319" y="146" fill="#b20000"/>
 			<att name="title" type="string" value="Spracherkenner"/>
 			<att name="language" type="string" value="Deutsch"/>
 			<att name="grammar" type="string" value="73210038-15e7-449e-a82e-babc4d7f885b"/>
+			<att name="grammarExpression" type="string" value=""/>
 		</node>
 		<node uid="a95620c4-7b14-4420-81ac-d847c6244f5b" class="de.saar.coli.dialogos.marytts.plugin.TTSNode">
-			<graphics x="316" y="313" fill="#00b200"/>
+			<graphics x="320" y="430" fill="#00b200"/>
 			<att name="title" type="string" value="Sprachsynthese"/>
 			<att name="voice" type="string" value="bits3-hsmm"/>
 			<att name="prompt" type="text">
-				<value>&quot;Das Ergebnis ist &quot; + ergebnistext</value>
+				<value>ergebnistext</value>
 			</att>
 			<att name="prompt_type" type="string" value="expression"/>
 			<att name="wait" type="boolean" value="1"/>
 			<att name="await_silence" type="boolean" value="0"/>
 		</node>
-		<node uid="caa673dc-7f0d-4a22-9934-bed4fc2d0c13" class="com.clt.diamant.graph.nodes.ScriptNode">
-			<graphics x="428" y="444" fill="#99ffff"/>
-			<att name="title" type="string" value="Script"/>
-			<att name="script" type="text">
-				<value>$ergebnistext = $zahlA + $zahlB </value>
-			</att>
+		<node uid="b8affff1-e94b-4570-97cf-4d77178d907a" class="com.clt.diamant.graph.nodes.SleepNode">
+			<graphics x="345" y="276" fill="#99ffff"/>
+			<att name="title" type="string" value="Wait"/>
+			<att name="time" type="string" value="300"/>
 		</node>
 		<node uid="eaa83e79-b502-403d-86ac-8017fe2558ed" class="com.clt.diamant.graph.nodes.StartNode">
 			<graphics x="346" y="34" fill="#9999ff"/>
 			<att name="title" type="string" value="Start"/>
 		</node>
-		<edge src="0b535701-f41e-40c2-99a4-f3c663479fba" tgt="9f21c42f-906d-4cf7-99d3-92c28fa73982">
-		</edge>
-		<edge src="9f21c42f-906d-4cf7-99d3-92c28fa73982" tgt="a95620c4-7b14-4420-81ac-d847c6244f5b">
+		<edge src="9f21c42f-906d-4cf7-99d3-92c28fa73982" tgt="b8affff1-e94b-4570-97cf-4d77178d907a">
 			<att name="condition" type="string" value="ergebnistext"/>
 		</edge>
-		<edge src="a95620c4-7b14-4420-81ac-d847c6244f5b" tgt="6dabc14a-7927-42fc-9d19-84b883c9ca78">
+		<edge src="a95620c4-7b14-4420-81ac-d847c6244f5b" tgt="2aefcc6b-d33e-49bf-9039-a34ad68eb3b4">
 		</edge>
-		<edge src="caa673dc-7f0d-4a22-9934-bed4fc2d0c13">
+		<edge src="b8affff1-e94b-4570-97cf-4d77178d907a" tgt="a95620c4-7b14-4420-81ac-d847c6244f5b">
 		</edge>
-		<edge src="eaa83e79-b502-403d-86ac-8017fe2558ed" tgt="0b535701-f41e-40c2-99a4-f3c663479fba">
+		<edge src="eaa83e79-b502-403d-86ac-8017fe2558ed" tgt="9f21c42f-906d-4cf7-99d3-92c28fa73982">
 		</edge>
 	</graph>
 </wizard>
