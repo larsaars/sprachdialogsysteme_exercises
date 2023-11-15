@@ -8,8 +8,8 @@
 		<att name="language" type="string" value="de_DE"/>
 	</plugin>
 	<graph directed="1" Graphic="1" Layout="points">
-		<att name="width" type="integer" value="2317"/>
-		<att name="height" type="integer" value="1311"/>
+		<att name="width" type="integer" value="2319"/>
+		<att name="height" type="integer" value="1313"/>
 		<script>
 			<name>wortInZahlUmwandeln</name>
 			<value>any wortZuZahl(any wort) {
@@ -43,8 +43,15 @@ $zahl = &quot;eins&quot; {$=1} | &quot;zwei&quot; {$=2} | &quot;drei&quot; {$=3}
 			<value>&quot;&quot;</value>
 		</variable>
 		<node uid="2aefcc6b-d33e-49bf-9039-a34ad68eb3b4" class="com.clt.diamant.graph.nodes.EndNode">
-			<graphics x="354" y="577" fill="#9999ff"/>
+			<graphics x="357" y="642" fill="#9999ff"/>
 			<att name="title" type="string" value="Ende"/>
+		</node>
+		<node uid="4881ba9f-7ba4-4465-86e9-4d626c37d390" class="com.clt.diamant.graph.nodes.ScriptNode">
+			<graphics x="318" y="519" fill="#99ffff"/>
+			<att name="title" type="string" value="Script"/>
+			<att name="script" type="text">
+				<value>print(ergebnistext);</value>
+			</att>
 		</node>
 		<node uid="9f21c42f-906d-4cf7-99d3-92c28fa73982" class="edu.cmu.lti.dialogos.sphinx.plugin.SphinxNode">
 			<graphics x="319" y="146" fill="#b20000"/>
@@ -54,7 +61,7 @@ $zahl = &quot;eins&quot; {$=1} | &quot;zwei&quot; {$=2} | &quot;drei&quot; {$=3}
 			<att name="grammarExpression" type="string" value=""/>
 		</node>
 		<node uid="a95620c4-7b14-4420-81ac-d847c6244f5b" class="de.saar.coli.dialogos.marytts.plugin.TTSNode">
-			<graphics x="320" y="430" fill="#00b200"/>
+			<graphics x="320" y="421" fill="#00b200"/>
 			<att name="title" type="string" value="Sprachsynthese"/>
 			<att name="voice" type="string" value="bits3-hsmm"/>
 			<att name="prompt" type="text">
@@ -73,10 +80,12 @@ $zahl = &quot;eins&quot; {$=1} | &quot;zwei&quot; {$=2} | &quot;drei&quot; {$=3}
 			<graphics x="346" y="34" fill="#9999ff"/>
 			<att name="title" type="string" value="Start"/>
 		</node>
+		<edge src="4881ba9f-7ba4-4465-86e9-4d626c37d390" tgt="2aefcc6b-d33e-49bf-9039-a34ad68eb3b4">
+		</edge>
 		<edge src="9f21c42f-906d-4cf7-99d3-92c28fa73982" tgt="b8affff1-e94b-4570-97cf-4d77178d907a">
 			<att name="condition" type="string" value="ergebnistext"/>
 		</edge>
-		<edge src="a95620c4-7b14-4420-81ac-d847c6244f5b" tgt="2aefcc6b-d33e-49bf-9039-a34ad68eb3b4">
+		<edge src="a95620c4-7b14-4420-81ac-d847c6244f5b" tgt="4881ba9f-7ba4-4465-86e9-4d626c37d390">
 		</edge>
 		<edge src="b8affff1-e94b-4570-97cf-4d77178d907a" tgt="a95620c4-7b14-4420-81ac-d847c6244f5b">
 		</edge>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE wizard SYSTEM "Wizard.dtd">
+
+<wizard>
+	<plugin type="dialogos.plugin.tts">
+	</plugin>
+	<plugin type="dialogos.plugin.sphinx">
+		<att name="language" type="string" value="de_DE"/>
+	</plugin>
+	<graph directed="1" Graphic="1" Layout="points">
+		<att name="width" type="integer" value="1603"/>
+		<att name="height" type="integer" value="927"/>
+		<groovyFunctions></groovyFunctions>
+		<grammar id="1201a202-86e5-439d-a9aa-da35ded0bb79">
+			<name>tierfutter</name>
+			<value>root $input;
+$art = einen | eine;
+$tier = hamster | katze | hund;
+$input = ($art $tier) {$=$tier} | $tier;</value>
+		</grammar>
+		<grammar id="e7d33510-f726-4b8f-b0b0-dda78577cde6">
+			<name>anzahl</name>
+			<value>root $zahl;
+$zahl = (&quot;eins&quot; | &quot;einen&quot;) {$=1} | &quot;zwei&quot; {$=2} | &quot;drei&quot; {$=3} | &quot;vier&quot; {$=4} | &quot;fünf&quot; {$=5}| &quot;sechs&quot; {$=6} | &quot;sieben&quot; {$=7} | &quot;acht&quot; {$=8} | &quot;neun&quot; {$=9} | &quot;zehn&quot; {$=10};</value>
+		</grammar>
+		<variable uid="661d59ab-abac-4347-b559-fbefc6179a5e">
+			<name>tiervar</name>
+			<type>string</type>
+			<value></value>
+		</variable>
+		<variable uid="3935a9bc-a7a0-4669-9e10-87ece4fe75a1">
+			<name>anzahlvar</name>
+			<type>int</type>
+			<value>1</value>
+		</variable>
+		<node uid="3e673033-7d17-410f-a2b2-b3cbd932c402" class="edu.cmu.lti.dialogos.sphinx.plugin.SphinxNode">
+			<graphics x="341" y="258" fill="#b20000"/>
+			<att name="title" type="string" value="Speech recognizer"/>
+			<att name="timeout" type="string" value="2500"/>
+			<att name="language" type="string" value="Deutsch"/>
+			<att name="grammar" type="string" value="1201a202-86e5-439d-a9aa-da35ded0bb79"/>
+		</node>
+		<node uid="48b00a83-26b8-4634-beab-a8546780f12b" class="edu.cmu.lti.dialogos.sphinx.plugin.SphinxNode">
+			<graphics x="328" y="473" fill="#b20000"/>
+			<att name="title" type="string" value="Speech recognizer"/>
+			<att name="timeout" type="string" value="2500"/>
+			<att name="language" type="string" value="Deutsch"/>
+			<att name="grammar" type="string" value="e7d33510-f726-4b8f-b0b0-dda78577cde6"/>
+		</node>
+		<node uid="65dd500c-4ab6-4c6d-80b8-6c7cffeeac8c" class="de.saar.coli.dialogos.marytts.plugin.TTSNode">
+			<graphics x="621" y="259" fill="#00b200"/>
+			<att name="title" type="string" value="Speech synthesis"/>
+			<att name="prompt" type="text">
+				<value>Entschuldigung, das habe ich leider nicht verstanden. Kannst du bitte wiederholen, ob du einen Hund eine Katze oder einen Hamster hast?</value>
+			</att>
+			<att name="prompt_type" type="string" value="text"/>
+			<att name="wait" type="boolean" value="1"/>
+			<att name="await_silence" type="boolean" value="0"/>
+		</node>
+		<node uid="7574fb21-b549-47fc-87d1-54d43a7ce2d0" class="de.saar.coli.dialogos.marytts.plugin.TTSNode">
+			<graphics x="339" y="135" fill="#00b200"/>
+			<att name="title" type="string" value="Speech synthesis"/>
+			<att name="prompt" type="text">
+				<value>Hallo. Wir verkaufen Trockenfutter sackweise, jeweils 250 Gramm für Hamster, Hunde und Katzen. Welches Tier haben Sie?</value>
+			</att>
+			<att name="prompt_type" type="string" value="text"/>
+			<att name="wait" type="boolean" value="1"/>
+			<att name="await_silence" type="boolean" value="0"/>
+		</node>
+		<node uid="7e31b6d1-87b5-490e-ac28-16be8df6fe45" class="de.saar.coli.dialogos.marytts.plugin.TTSNode">
+			<graphics x="324" y="576" fill="#00b200"/>
+			<att name="title" type="string" value="Speech synthesis"/>
+			<att name="prompt" type="text">
+				<value>Du willst + anzahlvar + Säcke + tiervar + futter. Ist das richtig?</value>
+			</att>
+			<att name="prompt_type" type="string" value="expression"/>
+			<att name="wait" type="boolean" value="1"/>
+			<att name="await_silence" type="boolean" value="0"/>
+		</node>
+		<node uid="8c1e0124-1099-4d0c-b8eb-f1632418c651" class="com.clt.diamant.graph.nodes.EndNode">
+			<graphics x="363" y="798" fill="#9999ff"/>
+			<att name="title" type="string" value="End"/>
+		</node>
+		<node uid="b736dac7-0586-461e-bbe9-7cead7084dd7" class="de.saar.coli.dialogos.marytts.plugin.TTSNode">
+			<graphics x="602" y="682" fill="#00b200"/>
+			<att name="title" type="string" value="Speech synthesis"/>
+			<att name="prompt" type="text">
+				<value>Das habe ich leider nicht verstanden. Bitte wiederhole dich.</value>
+			</att>
+			<att name="prompt_type" type="string" value="text"/>
+			<att name="wait" type="boolean" value="1"/>
+			<att name="await_silence" type="boolean" value="0"/>
+		</node>
+		<node uid="be0cb55a-52bb-431a-bff6-6fd060fb1f4b" class="edu.cmu.lti.dialogos.sphinx.plugin.SphinxNode">
+			<graphics x="312" y="671" fill="#b20000"/>
+			<att name="title" type="string" value="Speech recognizer"/>
+			<att name="timeout" type="string" value="1500"/>
+			<att name="language" type="string" value="Deutsch"/>
+		</node>
+		<node uid="cde96e8c-a29a-4a79-9846-9530c72220b9" class="com.clt.diamant.graph.nodes.StartNode">
+			<graphics x="370" y="40" fill="#9999ff"/>
+			<att name="title" type="string" value="Start"/>
+		</node>
+		<node uid="cfaa8182-0c76-43e0-bbe0-9c561fa8926f" class="de.saar.coli.dialogos.marytts.plugin.TTSNode">
+			<graphics x="618" y="475" fill="#00b200"/>
+			<att name="title" type="string" value="Speech synthesis"/>
+			<att name="prompt" type="text">
+				<value>Das ist leider keine gültige Anzahl. Bitte wiederhole die Anzahl an Säcken Trockenfutter, die du benötigst.</value>
+			</att>
+			<att name="prompt_type" type="string" value="text"/>
+			<att name="wait" type="boolean" value="1"/>
+			<att name="await_silence" type="boolean" value="0"/>
+		</node>
+		<node uid="ed4a6ebb-de64-4580-8156-b190e019f3b6" class="de.saar.coli.dialogos.marytts.plugin.TTSNode">
+			<graphics x="329" y="356" fill="#00b200"/>
+			<att name="title" type="string" value="Speech synthesis"/>
+			<att name="prompt" type="text">
+				<value>Wie viele Säcke Trockenfutter brauchst du denn?</value>
+			</att>
+			<att name="prompt_type" type="string" value="text"/>
+			<att name="wait" type="boolean" value="1"/>
+			<att name="await_silence" type="boolean" value="0"/>
+		</node>
+		<edge src="3e673033-7d17-410f-a2b2-b3cbd932c402" tgt="ed4a6ebb-de64-4580-8156-b190e019f3b6">
+			<att name="condition" type="string" value="tiervar"/>
+		</edge>
+		<edge type="timeout" src="3e673033-7d17-410f-a2b2-b3cbd932c402" tgt="65dd500c-4ab6-4c6d-80b8-6c7cffeeac8c">
+			<att name="condition" type="string" value="Timeout after 2500ms"/>
+			<att name="timeout" type="string" value="2500"/>
+		</edge>
+		<edge src="48b00a83-26b8-4634-beab-a8546780f12b" tgt="7e31b6d1-87b5-490e-ac28-16be8df6fe45">
+			<att name="condition" type="string" value="anzahlvar"/>
+		</edge>
+		<edge type="timeout" src="48b00a83-26b8-4634-beab-a8546780f12b" tgt="cfaa8182-0c76-43e0-bbe0-9c561fa8926f">
+			<att name="condition" type="string" value="Timeout after 2500ms"/>
+			<att name="timeout" type="string" value="2500"/>
+		</edge>
+		<edge src="65dd500c-4ab6-4c6d-80b8-6c7cffeeac8c" tgt="3e673033-7d17-410f-a2b2-b3cbd932c402">
+		</edge>
+		<edge src="7574fb21-b549-47fc-87d1-54d43a7ce2d0" tgt="3e673033-7d17-410f-a2b2-b3cbd932c402">
+		</edge>
+		<edge src="7e31b6d1-87b5-490e-ac28-16be8df6fe45" tgt="be0cb55a-52bb-431a-bff6-6fd060fb1f4b">
+		</edge>
+		<edge src="b736dac7-0586-461e-bbe9-7cead7084dd7" tgt="be0cb55a-52bb-431a-bff6-6fd060fb1f4b">
+		</edge>
+		<edge src="be0cb55a-52bb-431a-bff6-6fd060fb1f4b" tgt="8c1e0124-1099-4d0c-b8eb-f1632418c651">
+			<att name="condition" type="string" value="ja"/>
+		</edge>
+		<edge src="be0cb55a-52bb-431a-bff6-6fd060fb1f4b" tgt="7574fb21-b549-47fc-87d1-54d43a7ce2d0">
+			<att name="condition" type="string" value="nein"/>
+		</edge>
+		<edge type="timeout" src="be0cb55a-52bb-431a-bff6-6fd060fb1f4b" tgt="b736dac7-0586-461e-bbe9-7cead7084dd7">
+			<att name="condition" type="string" value="Timeout after 1500ms"/>
+			<att name="timeout" type="string" value="1500"/>
+		</edge>
+		<edge src="cde96e8c-a29a-4a79-9846-9530c72220b9" tgt="7574fb21-b549-47fc-87d1-54d43a7ce2d0">
+		</edge>
+		<edge src="cfaa8182-0c76-43e0-bbe0-9c561fa8926f" tgt="48b00a83-26b8-4634-beab-a8546780f12b">
+		</edge>
+		<edge src="ed4a6ebb-de64-4580-8156-b190e019f3b6" tgt="48b00a83-26b8-4634-beab-a8546780f12b">
+		</edge>
+	</graph>
+</wizard>
