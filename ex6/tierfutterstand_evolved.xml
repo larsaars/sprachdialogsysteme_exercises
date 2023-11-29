@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE wizard SYSTEM "Wizard.dtd">
+
+<wizard>
+	<plugin type="dialogos.plugin.tts">
+	</plugin>
+	<plugin type="dialogos.plugin.sphinx">
+		<att name="language" type="string" value="de_DE"/>
+	</plugin>
+	<graph directed="1" Graphic="1" Layout="points">
+		<att name="width" type="integer" value="1691"/>
+		<att name="height" type="integer" value="931"/>
+		<script>
+			<name>return_wert</name>
+			<value>String text = tiervar;
+
+String[] words = text.split(&quot; &quot;);
+
+for (String word : words) {
+	switch(word) {
+		case &quot;Hund&quot;:
+			System.out.println(&quot;Hundi daaaaa&quot;);
+			break;
+		case &quot;Katze&quot;:
+			System.out.println(&quot;Katzi daaaaa&quot;);
+			break;
+		case &quot;Hamster&quot;:
+			System.out.println(&quot;Hamsti daaaaa&quot;);
+			break;
+	}
+}</value>
+		</script>
+		<groovyFunctions></groovyFunctions>
+		<grammar id="1201a202-86e5-439d-a9aa-da35ded0bb79">
+			<name>tierfutter</name>
+			<value>root $input;
+
+$input = [$anzahl] $tier {$.tier=$tier} |
+	$anzahl {$.anzahl=$anzahl} [(Sack|Säcke)] |
+	[ich habe] $anzahl $tier {$.tier=$tier} (und [ich] (will|hätte|würde) [gerne]) $anzahl {$.anzahl=$anzahl} ((Sack|Säcke) kaufen);
+
+$anzahl = (eine|einen|eins) {$=1} | &quot;zwei&quot; {$=2} | &quot;drei&quot; {$=3} | &quot;vier&quot; {$=4} | &quot;fünf&quot; {$=5} | &quot;sechs&quot; {$=6} | &quot;sieben&quot; {$=7} | &quot;acht&quot; {$=8} | &quot;neun&quot; {$=9} | &quot;zehn&quot; {$=10}; 
+$tier = hamster {$=&quot;hamster&quot;}| katze[n] {$=&quot;katze&quot;}| hund[e]{$=&quot;hund&quot;};</value>
+		</grammar>
+		<grammar id="e7d33510-f726-4b8f-b0b0-dda78577cde6">
+			<name>anzahl</name>
+			<value>root $input;
+$input = $zahl [(Säcke|Sack)]{$ = $zahl}| Ich will $zahl (Säcke|Sack) kaufen {$= $zahl};
+$zahl = (&quot;eins&quot; | &quot;einen&quot;) {$=1} | &quot;zwei&quot; {$=2} | &quot;drei&quot; {$=3} | &quot;vier&quot; {$=4} | &quot;fünf&quot; {$=5}| &quot;sechs&quot; {$=6} | &quot;sieben&quot; {$=7} | &quot;acht&quot; {$=8} | &quot;neun&quot; {$=9} | &quot;zehn&quot; {$=10};</value>
+		</grammar>
+		<grammar id="fb25c4fb-4ea2-463e-9c31-432a044c84c3">
+			<name>haustier</name>
+			<value>root $input;
+$input = [Ich habe $tierzahl] $tier {$=$tier};
+$tierzahl = eine | einen | zwei | drei | vier | fünf | sechs | sieben | acht | neun | zehn;
+$tier = hamster {$=&quot;hamster&quot;}| katze[n] {$=&quot;katze&quot;}| hund[e]{$=&quot;hund&quot;};</value>
+		</grammar>
+		<variable uid="661d59ab-abac-4347-b559-fbefc6179a5e">
+			<name>tier</name>
+			<type>string</type>
+			<value>&quot;&quot;</value>
+		</variable>
+		<variable uid="3935a9bc-a7a0-4669-9e10-87ece4fe75a1">
+			<name>anzahl</name>
+			<type>int</type>
+			<value>0</value>
+		</variable>
+		<variable uid="15976f6b-526b-48f1-9c71-4f59adc3f31a">
+			<name>text</name>
+			<type>string</type>
+			<value>&quot;&quot;</value>
+		</variable>
+		<variable uid="62fee59e-5139-4390-b8b9-2af328b328a8">
+			<name>hilfe</name>
+			<type>string</type>
+			<value>&quot;&quot;</value>
+		</variable>
+		<variable uid="fe85f3a4-c2d7-4eaa-9bab-32e6f5b0cd0e">
+			<name>saganzahlvar</name>
+			<type>string</type>
+			<value>0</value>
+		</variable>
+		<node uid="04b910b6-7bf1-4318-b654-fd04b648b2ff" class="com.clt.diamant.graph.nodes.ConditionalNode">
+			<graphics x="757" y="294" fill="#c0c0c0"/>
+			<att name="title" type="string" value="Bedingung"/>
+			<att name="expression" type="string" value="anzahlvar != 0"/>
+		</node>
+		<node uid="06769a2c-0e10-486a-a5c4-380d60402945" class="com.clt.diamant.graph.nodes.ConditionalNode">
+			<graphics x="589" y="663" fill="#c0c0c0"/>
+			<att name="title" type="string" value="3.Bedingung"/>
+			<att name="expression" type="string" value="anzahlvar != 0"/>
+		</node>
+		<node uid="07a042e6-7b64-47df-8eb7-0a24c8a9a0f1" class="de.saar.coli.dialogos.marytts.plugin.TTSNode">
+			<graphics x="59" y="746" fill="#00b200"/>
+			<att name="title" type="string" value="Sprachsynthese"/>
+			<att name="prompt" type="text">
+				<value>&quot;Okay. Also du möchstest einen Sack Trockenfutter für &quot; + hilfe  + tiervar + &quot;kaufen? Wenn es stimmt, bitte Das ist richtig sagen. Ansonsten Nein. &quot;
+
+
+</value>
+			</att>
+			<att name="prompt_type" type="string" value="expression"/>
+			<att name="wait" type="boolean" value="1"/>
+			<att name="await_silence" type="boolean" value="0"/>
+		</node>
+		<node uid="113ce58d-7328-4fd1-b8f9-35841d5aa7ee" class="de.saar.coli.dialogos.marytts.plugin.TTSNode">
+			<graphics x="152" y="868" fill="#00b200"/>
+			<att name="title" type="string" value="Sprachsynthese"/>
+			<att name="prompt" type="text">
+				<value>Cool! Digga.
+</value>
+			</att>
+			<att name="prompt_type" type="string" value="text"/>
+			<att name="wait" type="boolean" value="1"/>
+			<att name="await_silence" type="boolean" value="0"/>
+		</node>
+		<node uid="11b479a6-fa5b-41e6-bb59-ce0644bda9ff" class="edu.cmu.lti.dialogos.sphinx.plugin.SphinxNode">
+			<graphics x="164" y="808" fill="#b20000"/>
+			<att name="title" type="string" value="Spracherkenner"/>
+			<att name="language" type="string" value="Deutsch"/>
+		</node>
+		<node uid="22954ca2-803d-4eef-9c82-01c61d31c067" class="com.clt.diamant.graph.nodes.ScriptNode">
+			<graphics x="1070" y="243" fill="#99ffff"/>
+			<att name="title" type="string" value="tiervar"/>
+			<att name="script" type="text">
+				<value>//return_wert();
+
+string input = tiervar;
+
+if(contains(input, &quot;katze&quot;))
+{	
+	tiervar = &quot;Katze&quot;;
+	hilfe = &quot;eine&quot;;
+}
+else if(contains(input, &quot;hund&quot;))
+{	
+	tiervar = &quot;Hund&quot;;
+	hilfe = &quot;einen&quot;;
+}
+else if(contains(input, &quot;hamster&quot;))
+{	
+	tiervar = &quot;Hamster&quot;;
+	hilfe = &quot;einen&quot;;
+}
+else {
+	tiervar = &quot;leer&quot;;
+}
+/*
+string words = tiervar.split(&quot; &quot;);
+
+for (string word : words) {
+	switch(word) {
+		case &quot;Hund&quot;:
+			//System.out.println(&quot;Hundidaaaaa&quot;);
+			tiervar = &quot;hallo&quot;;
+			break;
+
+		case &quot;Katze&quot;:
+			//System.out.println(&quot;Katzi daaaaa&quot;);
+			tiervar = &quot;hallo&quot;;
+			break;
+
+		case &quot;Hamster&quot;:
+			//System.out.println(&quot;Hamsti daaaaa&quot;);
+			tiervar = &quot;hallo&quot;;
+			break;
+		default:
+			tiervar = &quot;hallo&quot;;
+			break;
+	}
+}
+*/</value>
+			</att>
+		</node>
+		<node uid="32160003-a5e3-4840-b1c5-4bff433726d7" class="edu.cmu.lti.dialogos.sphinx.plugin.SphinxNode">
+			<graphics x="1047" y="175" fill="#b20000"/>
+			<att name="title" type="string" value="Spracherkenner"/>
+			<att name="language" type="string" value="Deutsch"/>
+			<att name="grammar" type="string" value="fb25c4fb-4ea2-463e-9c31-432a044c84c3"/>
+		</node>
+		<node uid="35a384ab-f3c2-49b6-917e-7243be9f690f" class="edu.cmu.lti.dialogos.sphinx.plugin.SphinxNode">
+			<graphics x="582" y="582" fill="#b20000"/>
+			<att name="title" type="string" value="Spracherkenner"/>
+			<att name="language" type="string" value="Deutsch"/>
+			<att name="grammar" type="string" value="e7d33510-f726-4b8f-b0b0-dda78577cde6"/>
+		</node>
+		<node uid="3e1da11c-a6af-40bc-ae7a-060161a72dfb" class="com.clt.diamant.graph.nodes.ConditionalNode">
+			<graphics x="902" y="328" fill="#c0c0c0"/>
+			<att name="title" type="string" value="Bedingung"/>
+			<att name="expression" type="string" value="!contains(tiervar, &quot;leer&quot;)"/>
+		</node>
+		<node uid="3e673033-7d17-410f-a2b2-b3cbd932c402" class="edu.cmu.lti.dialogos.sphinx.plugin.SphinxNode">
+			<graphics x="355" y="216" fill="#b20000"/>
+			<att name="title" type="string" value="Speech recognizer"/>
+			<att name="language" type="string" value="Deutsch"/>
+			<att name="grammar" type="string" value="1201a202-86e5-439d-a9aa-da35ded0bb79"/>
+		</node>
+		<node uid="46ee3dca-a765-4345-b155-3f01c7f03073" class="com.clt.diamant.graph.nodes.CallNode">
+			<graphics x="530" y="556" fill="#ffff99"/>
+			<att name="title" type="string" value="2N_anzahl"/>
+		</node>
+		<node uid="4c0d212b-a6f3-47c8-a7df-7ae3f217ef80" class="com.clt.diamant.graph.nodes.CallNode">
+			<graphics x="560" y="210" fill="#ffff99"/>
+			<att name="title" type="string" value="N_tiervar"/>
+		</node>
+		<node uid="4cdf9744-60f2-4d48-bc9e-47836d015980" class="com.clt.diamant.graph.nodes.CallNode">
+			<graphics x="288" y="565" fill="#ffff99"/>
+			<att name="title" type="string" value="N_anzahl"/>
+		</node>
+		<node uid="4fddcbd8-15cd-4c01-bda8-6d2346170c71" class="com.clt.diamant.graph.nodes.CallNode">
+			<graphics x="1000" y="192" fill="#ffff99"/>
+			<att name="title" type="string" value="2N_tiervar"/>
+		</node>
+		<node uid="577fb1a5-390f-4b25-8e7d-88a8c6abc3f2" class="de.saar.coli.dialogos.marytts.plugin.TTSNode">
+			<graphics x="1050" y="96" fill="#00b200"/>
+			<att name="title" type="string" value="Sprachsynthese"/>
+			<att name="prompt" type="text">
+				<value>Bitte sagen Sie nur die Art des Haustiers, also entweder Hund, Katze, Maus. Nein als letztes natürlich Hamster xDDDD.
+Sprich deutlicher, dann bin ich netter haha.</value>
+			</att>
+			<att name="prompt_type" type="string" value="text"/>
+			<att name="wait" type="boolean" value="1"/>
+			<att name="await_silence" type="boolean" value="0"/>
+		</node>
+		<node uid="63b60d2b-08f8-4f70-92e3-30fd16488298" class="com.clt.diamant.graph.nodes.ConditionalNode">
+			<graphics x="1060" y="339" fill="#c0c0c0"/>
+			<att name="title" type="string" value="Bedingung"/>
+			<att name="expression" type="string" value="!contains(tiervar, &quot;leer&quot;)"/>
+		</node>
+		<node uid="689eeff7-cb87-45bd-962e-af9b074dd2f6" class="com.clt.diamant.graph.nodes.ConditionalNode">
+			<graphics x="745" y="72" fill="#c0c0c0"/>
+			<att name="title" type="string" value="Bedingung"/>
+			<att name="expression" type="string" value="anzahl != 0"/>
+		</node>
+		<node uid="7574fb21-b549-47fc-87d1-54d43a7ce2d0" class="de.saar.coli.dialogos.marytts.plugin.TTSNode">
+			<graphics x="343" y="116" fill="#00b200"/>
+			<att name="title" type="string" value="Speech synthesis"/>
+			<att name="prompt" type="text">
+				<value>Hallo. Wir verkaufen Trockenfutter für Hamster, Hunde und Katzen. 
+Ein Sack wiegt jeweils 250 Gramm.
+Welches Tier haben Sie und wie viele Säcke wollen Sie kaufen?</value>
+			</att>
+			<att name="prompt_type" type="string" value="text"/>
+			<att name="wait" type="boolean" value="1"/>
+			<att name="await_silence" type="boolean" value="0"/>
+		</node>
+		<node uid="7bf13693-2e1a-40bf-a8f2-65cbaa3f4ac8" class="de.saar.coli.dialogos.marytts.plugin.TTSNode">
+			<graphics x="417" y="513" fill="#00b200"/>
+			<att name="title" type="string" value="Sprachsynthese"/>
+			<att name="prompt" type="text">
+				<value>&quot;Okay, Wie viele Säcke wollen Sie kaufen?&quot;
+</value>
+			</att>
+			<att name="prompt_type" type="string" value="expression"/>
+			<att name="wait" type="boolean" value="1"/>
+			<att name="await_silence" type="boolean" value="0"/>
+		</node>
+		<node uid="7d41b2bc-5487-44be-8ce1-7e33a953617e" class="com.clt.diamant.graph.nodes.ScriptNode">
+			<graphics x="908" y="247" fill="#99ffff"/>
+			<att name="title" type="string" value="tiervar"/>
+			<att name="script" type="text">
+				<value>//return_wert();
+
+string input = tiervar;
+
+if(contains(input, &quot;katze&quot;))
+{	
+	tiervar = &quot;Katze&quot;;
+	hilfe = &quot;eine&quot;;
+}
+else if(contains(input, &quot;hund&quot;))
+{	
+	tiervar = &quot;Hund&quot;;
+	hilfe = &quot;einen&quot;;
+}
+else if(contains(input, &quot;hamster&quot;))
+{	
+	tiervar = &quot;Hamster&quot;;
+	hilfe = &quot;einen&quot;;
+}
+else {
+	tiervar = &quot;leer&quot;;
+}
+/*
+string words = tiervar.split(&quot; &quot;);
+
+for (string word : words) {
+	switch(word) {
+		case &quot;Hund&quot;:
+			//System.out.println(&quot;Hundidaaaaa&quot;);
+			tiervar = &quot;hallo&quot;;
+			break;
+
+		case &quot;Katze&quot;:
+			//System.out.println(&quot;Katzi daaaaa&quot;);
+			tiervar = &quot;hallo&quot;;
+			break;
+
+		case &quot;Hamster&quot;:
+			//System.out.println(&quot;Hamsti daaaaa&quot;);
+			tiervar = &quot;hallo&quot;;
+			break;
+		default:
+			tiervar = &quot;hallo&quot;;
+			break;
+	}
+}
+*/</value>
+			</att>
+		</node>
+		<node uid="80d500c4-e464-4ebc-83ca-f99e3f931e85" class="de.saar.coli.dialogos.marytts.plugin.TTSNode">
+			<graphics x="882" y="99" fill="#00b200"/>
+			<att name="title" type="string" value="Sprachsynthese"/>
+			<att name="prompt" type="text">
+				<value>Bitte sagen Sie welches Haustier Sie besitzen. </value>
+			</att>
+			<att name="prompt_type" type="string" value="text"/>
+			<att name="wait" type="boolean" value="1"/>
+			<att name="await_silence" type="boolean" value="0"/>
+		</node>
+		<node uid="85131fd2-563b-4c9c-9772-445eb3660e5a" class="com.clt.diamant.graph.nodes.ConditionalNode">
+			<graphics x="357" y="318" fill="#c0c0c0"/>
+			<att name="title" type="string" value="Bedingung"/>
+			<att name="expression" type="string" value="tier == &quot;&quot;"/>
+		</node>
+		<node uid="a17b001f-aecd-4fd9-9fca-0bd44a3e96ed" class="com.clt.diamant.graph.nodes.EndNode">
+			<graphics x="449" y="876" fill="#9999ff"/>
+			<att name="title" type="string" value="Ende"/>
+		</node>
+		<node uid="a5505f63-591a-4be1-a3bb-307cbd2b4ca9" class="edu.cmu.lti.dialogos.sphinx.plugin.SphinxNode">
+			<graphics x="412" y="581" fill="#b20000"/>
+			<att name="title" type="string" value="Spracherkenner"/>
+			<att name="language" type="string" value="Deutsch"/>
+			<att name="grammar" type="string" value="e7d33510-f726-4b8f-b0b0-dda78577cde6"/>
+		</node>
+		<node uid="a67d8e32-66fa-486c-a0e0-f4c84bc25248" class="edu.cmu.lti.dialogos.sphinx.plugin.SphinxNode">
+			<graphics x="881" y="179" fill="#b20000"/>
+			<att name="title" type="string" value="Spracherkenner"/>
+			<att name="language" type="string" value="Deutsch"/>
+			<att name="grammar" type="string" value="fb25c4fb-4ea2-463e-9c31-432a044c84c3"/>
+		</node>
+		<node uid="b8cb4936-fbf5-441a-ab6d-25edd032d0e0" class="com.clt.diamant.graph.nodes.ConditionalNode">
+			<graphics x="155" y="608" fill="#c0c0c0"/>
+			<att name="title" type="string" value="Bedingung"/>
+			<att name="expression" type="string" value="anzahlvar != 0"/>
+		</node>
+		<node uid="c59543bb-a6b8-4a28-9fd7-4657538f0430" class="com.clt.diamant.graph.nodes.ConditionalNode">
+			<graphics x="420" y="661" fill="#c0c0c0"/>
+			<att name="title" type="string" value="2.Bedingung"/>
+			<att name="expression" type="string" value="anzahlvar != 0"/>
+		</node>
+		<node uid="c8ad27a4-67ef-4b81-a8fe-e3ff044012fe" class="com.clt.diamant.graph.nodes.ConditionalNode">
+			<graphics x="117" y="683" fill="#c0c0c0"/>
+			<att name="title" type="string" value="isteins?JA"/>
+			<att name="expression" type="string" value="anzahlvar == 1"/>
+		</node>
+		<node uid="cde96e8c-a29a-4a79-9846-9530c72220b9" class="com.clt.diamant.graph.nodes.StartNode">
+			<graphics x="110" y="52" fill="#9999ff"/>
+			<att name="title" type="string" value="Start"/>
+		</node>
+		<node uid="e501fdee-d396-4b2f-be03-c8b42fb7fa8b" class="com.clt.diamant.graph.nodes.SetVariableNode">
+			<graphics x="27" y="149" fill="#c0c0c0"/>
+			<att name="title" type="string" value="dummy"/>
+			<att name="assignments" type="list">
+				<att name="1" type="list">
+					<att name="var_uid" type="string" value="15976f6b-526b-48f1-9c71-4f59adc3f31a"/>
+					<att name="var_value" type="string" value="&quot;katze4&quot;"/>
+				</att>
+			</att>
+			<att name="simultaneous" type="boolean" value="0"/>
+		</node>
+		<node uid="eb0891ff-cfe3-4092-97d3-4439917144ec" class="de.saar.coli.dialogos.marytts.plugin.TTSNode">
+			<graphics x="584" y="515" fill="#00b200"/>
+			<att name="title" type="string" value="Sprachsynthese"/>
+			<att name="prompt" type="text">
+				<value>Bitte sagen Sie nur die Zahl an Säcken, die sie kaufen möchten. Also z.b. eins für einen Sack oder zwei bei zwei Säcken. </value>
+			</att>
+			<att name="prompt_type" type="string" value="text"/>
+			<att name="wait" type="boolean" value="1"/>
+			<att name="await_silence" type="boolean" value="0"/>
+		</node>
+		<node uid="eb8b1dea-0398-40c3-ab5c-556b305dd9b0" class="com.clt.diamant.graph.nodes.ScriptNode">
+			<graphics x="757" y="203" fill="#99ffff"/>
+			<att name="title" type="string" value="anzahlvar"/>
+			<att name="script" type="text">
+				<value>string input = text;
+
+if(contains(input, &quot;eins&quot;))
+{	
+	anzahlvar = 1;
+
+}
+else if(contains(input, &quot;einen&quot;))
+{	
+	anzahlvar = 1;
+
+}
+else if(contains(input, &quot;zwei&quot;))
+{	
+	anzahlvar = 2;
+	
+}
+else if(contains(input, &quot;drei&quot;))
+{	
+	anzahlvar = 3;
+}
+else if(contains(input, &quot;vier&quot;))
+{	
+	anzahlvar = 4;
+}
+else if(contains(input, &quot;fünf&quot;))
+{	
+	anzahlvar = 5;
+}
+else if(contains(input, &quot;sechs&quot;))
+{	
+	anzahlvar = 6;
+}
+else if(contains(input, &quot;sieben&quot;))
+{	
+	anzahlvar = 7;
+}
+else if(contains(input, &quot;acht&quot;))
+{	
+	anzahlvar = 8;
+}
+else if(contains(input, &quot;neun&quot;))
+{	
+	anzahlvar = 9;
+}
+else if(contains(input, &quot;zehn&quot;))
+{	
+	anzahlvar = 10;
+}
+else {
+	anzahlvar = 0;
+}</value>
+			</att>
+		</node>
+		<node uid="ed4a6ebb-de64-4580-8156-b190e019f3b6" class="de.saar.coli.dialogos.marytts.plugin.TTSNode">
+			<graphics x="235" y="744" fill="#00b200"/>
+			<att name="title" type="string" value="Speech synthesis"/>
+			<att name="prompt" type="text">
+				<value>&quot;Okay. Also du möchstest Futter für &quot;+ hilfe + tiervar + &quot;und eine Anzahl von&quot; + anzahlvar  + &quot;Säcken Trockenfutter kaufen? Wenn es stimmt, bitte Das ist richtig sagen. Ansonsten Nein. &quot;
+
+
+</value>
+			</att>
+			<att name="prompt_type" type="string" value="expression"/>
+			<att name="wait" type="boolean" value="1"/>
+			<att name="await_silence" type="boolean" value="0"/>
+		</node>
+		<node uid="f5a87da6-0284-495e-b08b-7d0b754e5f84" class="de.saar.coli.dialogos.marytts.plugin.TTSNode">
+			<graphics x="528" y="81" fill="#00b200"/>
+			<att name="title" type="string" value="Sprachsynthese"/>
+			<att name="prompt" type="text">
+				<value>Tut mir leid, dass es nicht geklappt hat. Aber das schöne ist ja, dass ich mir Zeit für dich nehme. Deshalb noch einmal gaaaanz von vorne:</value>
+			</att>
+			<att name="prompt_type" type="string" value="text"/>
+			<att name="wait" type="boolean" value="1"/>
+			<att name="await_silence" type="boolean" value="0"/>
+		</node>
+		<edge src="04b910b6-7bf1-4318-b654-fd04b648b2ff" tgt="80d500c4-e464-4ebc-83ca-f99e3f931e85">
+			<att name="condition" type="string" value="anzahlvar != 0"/>
+		</edge>
+		<edge src="04b910b6-7bf1-4318-b654-fd04b648b2ff" tgt="7574fb21-b549-47fc-87d1-54d43a7ce2d0">
+			<att name="condition" type="string" value="else"/>
+		</edge>
+		<edge src="06769a2c-0e10-486a-a5c4-380d60402945" tgt="c8ad27a4-67ef-4b81-a8fe-e3ff044012fe">
+			<att name="condition" type="string" value="anzahlvar != 0"/>
+		</edge>
+		<edge src="06769a2c-0e10-486a-a5c4-380d60402945" tgt="f5a87da6-0284-495e-b08b-7d0b754e5f84">
+			<att name="condition" type="string" value="else"/>
+		</edge>
+		<edge src="07a042e6-7b64-47df-8eb7-0a24c8a9a0f1" tgt="11b479a6-fa5b-41e6-bb59-ce0644bda9ff">
+		</edge>
+		<edge src="113ce58d-7328-4fd1-b8f9-35841d5aa7ee" tgt="a17b001f-aecd-4fd9-9fca-0bd44a3e96ed">
+		</edge>
+		<edge src="11b479a6-fa5b-41e6-bb59-ce0644bda9ff" tgt="113ce58d-7328-4fd1-b8f9-35841d5aa7ee">
+			<att name="condition" type="string" value="Das ist richtig"/>
+		</edge>
+		<edge src="11b479a6-fa5b-41e6-bb59-ce0644bda9ff" tgt="f5a87da6-0284-495e-b08b-7d0b754e5f84">
+			<att name="condition" type="string" value="Nein"/>
+		</edge>
+		<edge src="22954ca2-803d-4eef-9c82-01c61d31c067" tgt="63b60d2b-08f8-4f70-92e3-30fd16488298">
+		</edge>
+		<edge src="32160003-a5e3-4840-b1c5-4bff433726d7" tgt="22954ca2-803d-4eef-9c82-01c61d31c067">
+			<att name="condition" type="string" value="tiervar"/>
+		</edge>
+		<edge src="35a384ab-f3c2-49b6-917e-7243be9f690f" tgt="06769a2c-0e10-486a-a5c4-380d60402945">
+			<att name="condition" type="string" value="anzahlvar"/>
+		</edge>
+		<edge src="3e1da11c-a6af-40bc-ae7a-060161a72dfb" tgt="c8ad27a4-67ef-4b81-a8fe-e3ff044012fe">
+			<att name="condition" type="string" value="!contains(tiervar, &quot;leer&quot;)"/>
+		</edge>
+		<edge src="3e1da11c-a6af-40bc-ae7a-060161a72dfb" tgt="577fb1a5-390f-4b25-8e7d-88a8c6abc3f2">
+			<att name="condition" type="string" value="else"/>
+		</edge>
+		<edge src="3e673033-7d17-410f-a2b2-b3cbd932c402" tgt="85131fd2-563b-4c9c-9772-445eb3660e5a">
+			<att name="condition" type="string" value="anzahl"/>
+		</edge>
+		<edge src="3e673033-7d17-410f-a2b2-b3cbd932c402">
+			<att name="condition" type="string" value="tier"/>
+		</edge>
+		<edge src="577fb1a5-390f-4b25-8e7d-88a8c6abc3f2" tgt="32160003-a5e3-4840-b1c5-4bff433726d7">
+		</edge>
+		<edge src="63b60d2b-08f8-4f70-92e3-30fd16488298" tgt="c8ad27a4-67ef-4b81-a8fe-e3ff044012fe">
+			<att name="condition" type="string" value="!contains(tiervar, &quot;leer&quot;)"/>
+		</edge>
+		<edge src="63b60d2b-08f8-4f70-92e3-30fd16488298" tgt="f5a87da6-0284-495e-b08b-7d0b754e5f84">
+			<att name="condition" type="string" value="else"/>
+		</edge>
+		<edge src="689eeff7-cb87-45bd-962e-af9b074dd2f6" tgt="80d500c4-e464-4ebc-83ca-f99e3f931e85">
+			<att name="condition" type="string" value="anzahl != 0"/>
+		</edge>
+		<edge src="689eeff7-cb87-45bd-962e-af9b074dd2f6" tgt="eb8b1dea-0398-40c3-ab5c-556b305dd9b0">
+			<att name="condition" type="string" value="else"/>
+		</edge>
+		<edge src="7574fb21-b549-47fc-87d1-54d43a7ce2d0" tgt="3e673033-7d17-410f-a2b2-b3cbd932c402">
+		</edge>
+		<edge src="7bf13693-2e1a-40bf-a8f2-65cbaa3f4ac8" tgt="a5505f63-591a-4be1-a3bb-307cbd2b4ca9">
+		</edge>
+		<edge src="7d41b2bc-5487-44be-8ce1-7e33a953617e" tgt="3e1da11c-a6af-40bc-ae7a-060161a72dfb">
+		</edge>
+		<edge src="80d500c4-e464-4ebc-83ca-f99e3f931e85" tgt="a67d8e32-66fa-486c-a0e0-f4c84bc25248">
+		</edge>
+		<edge src="85131fd2-563b-4c9c-9772-445eb3660e5a" tgt="b8cb4936-fbf5-441a-ab6d-25edd032d0e0">
+			<att name="condition" type="string" value="tier == &quot;&quot;"/>
+		</edge>
+		<edge src="85131fd2-563b-4c9c-9772-445eb3660e5a" tgt="689eeff7-cb87-45bd-962e-af9b074dd2f6">
+			<att name="condition" type="string" value="else"/>
+		</edge>
+		<edge src="a5505f63-591a-4be1-a3bb-307cbd2b4ca9" tgt="c59543bb-a6b8-4a28-9fd7-4657538f0430">
+			<att name="condition" type="string" value="anzahlvar"/>
+		</edge>
+		<edge src="a67d8e32-66fa-486c-a0e0-f4c84bc25248" tgt="7d41b2bc-5487-44be-8ce1-7e33a953617e">
+			<att name="condition" type="string" value="tiervar"/>
+		</edge>
+		<edge src="b8cb4936-fbf5-441a-ab6d-25edd032d0e0" tgt="c8ad27a4-67ef-4b81-a8fe-e3ff044012fe">
+			<att name="condition" type="string" value="anzahlvar != 0"/>
+		</edge>
+		<edge src="b8cb4936-fbf5-441a-ab6d-25edd032d0e0" tgt="7bf13693-2e1a-40bf-a8f2-65cbaa3f4ac8">
+			<att name="condition" type="string" value="else"/>
+		</edge>
+		<edge src="c59543bb-a6b8-4a28-9fd7-4657538f0430" tgt="c8ad27a4-67ef-4b81-a8fe-e3ff044012fe">
+			<att name="condition" type="string" value="anzahlvar != 0"/>
+		</edge>
+		<edge src="c59543bb-a6b8-4a28-9fd7-4657538f0430" tgt="eb0891ff-cfe3-4092-97d3-4439917144ec">
+			<att name="condition" type="string" value="else"/>
+		</edge>
+		<edge src="c8ad27a4-67ef-4b81-a8fe-e3ff044012fe" tgt="07a042e6-7b64-47df-8eb7-0a24c8a9a0f1">
+			<att name="condition" type="string" value="anzahlvar == 1"/>
+		</edge>
+		<edge src="c8ad27a4-67ef-4b81-a8fe-e3ff044012fe" tgt="ed4a6ebb-de64-4580-8156-b190e019f3b6">
+			<att name="condition" type="string" value="else"/>
+		</edge>
+		<edge src="cde96e8c-a29a-4a79-9846-9530c72220b9" tgt="7574fb21-b549-47fc-87d1-54d43a7ce2d0">
+		</edge>
+		<edge src="e501fdee-d396-4b2f-be03-c8b42fb7fa8b">
+		</edge>
+		<edge src="eb0891ff-cfe3-4092-97d3-4439917144ec" tgt="35a384ab-f3c2-49b6-917e-7243be9f690f">
+		</edge>
+		<edge src="eb8b1dea-0398-40c3-ab5c-556b305dd9b0" tgt="04b910b6-7bf1-4318-b654-fd04b648b2ff">
+		</edge>
+		<edge src="ed4a6ebb-de64-4580-8156-b190e019f3b6" tgt="11b479a6-fa5b-41e6-bb59-ce0644bda9ff">
+		</edge>
+		<edge src="f5a87da6-0284-495e-b08b-7d0b754e5f84" tgt="7574fb21-b549-47fc-87d1-54d43a7ce2d0">
+		</edge>
+	</graph>
+</wizard>
