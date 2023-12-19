@@ -1,0 +1,5 @@
+name: dialogsys
+channels:
+  - conda-forge
+  - defaults
+prefix: /home/me/miniconda3/envs/dialogsys
