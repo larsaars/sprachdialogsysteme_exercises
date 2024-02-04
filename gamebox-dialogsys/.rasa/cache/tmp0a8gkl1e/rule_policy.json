@@ -1,0 +1,28 @@
+{
+  "lookup": {
+    "rules": {
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"slots\": {\"game_type\": [1.0]}, \"user\": {\"intent\": \"name_animal\"}}]": "action_play_animal_game",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"slots\": {\"game_type\": [1.0]}, \"user\": {\"intent\": \"name_animal\"}}, {\"prev_action\": {\"action_name\": \"action_play_animal_game\"}, \"slots\": {\"game_type\": [1.0]}, \"user\": {\"intent\": \"name_animal\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"slots\": {\"game_type\": [1.0]}, \"user\": {\"intent\": \"name_food\"}}]": "action_play_food_game",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"slots\": {\"game_type\": [1.0]}, \"user\": {\"intent\": \"name_food\"}}, {\"prev_action\": {\"action_name\": \"action_play_food_game\"}, \"slots\": {\"game_type\": [1.0]}, \"user\": {\"intent\": \"name_food\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"end_game\"}}]": "action_end_game",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"end_game\"}}, {\"prev_action\": {\"action_name\": \"action_end_game\"}, \"user\": {\"intent\": \"end_game\"}}]": "action_listen"
+    },
+    "rule_only_slots": [
+      "game_type"
+    ],
+    "rule_only_loops": [],
+    "rules_for_loop_unhappy_path": {},
+    "rules_not_in_stories": [
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"slots\": {\"game_type\": [1.0]}, \"user\": {\"intent\": \"name_animal\"}}, {\"prev_action\": {\"action_name\": \"action_play_animal_game\"}, \"slots\": {\"game_type\": [1.0]}, \"user\": {\"intent\": \"name_animal\"}}]",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"end_game\"}}]",
+      "predicting default action with intent restart",
+      "predicting default action with intent session_start",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"slots\": {\"game_type\": [1.0]}, \"user\": {\"intent\": \"name_animal\"}}]",
+      "predicting default action with intent back",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"end_game\"}}, {\"prev_action\": {\"action_name\": \"action_end_game\"}, \"user\": {\"intent\": \"end_game\"}}]",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"slots\": {\"game_type\": [1.0]}, \"user\": {\"intent\": \"name_food\"}}, {\"prev_action\": {\"action_name\": \"action_play_food_game\"}, \"slots\": {\"game_type\": [1.0]}, \"user\": {\"intent\": \"name_food\"}}]",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"slots\": {\"game_type\": [1.0]}, \"user\": {\"intent\": \"name_food\"}}]"
+    ]
+  }
+}
