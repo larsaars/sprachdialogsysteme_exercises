@@ -29,3 +29,6 @@ venv/
 .ipynb_checkpoints/
 __pycache__/
 
+# dialogsys
+dialogsys/models/
+dialogsys/.rasa/

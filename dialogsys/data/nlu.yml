@@ -1,0 +1,88 @@
+version: "3.1"
+
+nlu:
+- intent: affirmation
+  examples: |
+    - yes
+    - okay
+    - absolutely
+       
+- intent: negation
+  examples: |
+    - no
+
+- intent: choose_animal_game
+  examples: |
+    - let's play the animal game
+    - animal game
+    - I would like to play the animal game now
+
+- intent: choose_food_game
+  examples: |
+    - let's play the food game
+    - food game
+    - I would like to play the food game now
+
+- intent: end_game
+  examples: |
+    - I give up
+    - let's end this game
+    - let's stop playing
+    - I have had enough
+
+- intent: explain_rules
+  examples: |
+    - can you please explain the rules
+    - I don't understand the game
+    - can you please give me instructions how this game works
+    - help
+
+- intent: restart_game
+  examples: |
+    - can we restart the game
+    - let's play again
+
+
+- intent: game_answer 
+  examples: |
+    - I say [lion](answer)
+    - [elephant](answer)
+    - [dolphin](answer)
+    - [tiger](answer)
+    - [lion](answer)
+    - [penguin](answer)
+    - [koala](answer)
+    - [giraffe](answer)
+    - [cheetah](answer)
+    - [kangaroo](answer)
+    - [gorilla](answer)
+    - [polar bear](answer)
+    - [octopus](answer)
+    - [bald eagle](answer)
+    - [komodo dragon](answer)
+    - [red fox](answer)
+    - [hippopotamus](answer)
+    - [zebra](answer)
+    - [owl](answer)
+    - [chimpanzee](answer)
+    - [rhinoceros](answer)
+    - How about [spaghetti](answer)
+    - [pizza](answer)
+    - [sushi](answer)
+    - [chocolate](answer)
+    - [burgers](answer)
+    - [tacos](answer)
+    - [ice cream](answer)
+    - [salad](answer)
+    - [steak](answer)
+    - [chicken nuggets](answer)
+    - [pancakes](answer)
+    - [ramen](answer)
+    - [pineapple](answer)
+    - [watermelon](answer)
+    - [avocado](answer)
+    - [popcorn](answer)
+    - [cucumber](answer)
+    - [blueberries](answer)
+    - [cheese](answer)
+    - [broccoli](answer)

@@ -1,27 +1,17 @@
 #!/usr/bin/env python3
 
 """
-
+dialogue manager for the gamebox bot
 """
 
-import os
-import subprocess
-
-
-def tts(text, language='en'):
-    """Text to speech function using espeak"""
-
-    command = f'espeak -v {language} -s 150 "{text}" --stdout | aplay'
-    
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    process.wait()
+from utils import asr, tts, print_mode
 
 
 def main():
-    pass
+    tts('fuck')
 
 
-if __name__ == '__main__':
+if __main__ == "__main__":
+    print_mode = True
+
     main()
-
-
