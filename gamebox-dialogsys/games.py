@@ -316,7 +316,8 @@ The game does not really end, until you say so."""
 
         # make prediction about the next words
         # generate a random amount of next words
-        n_limit = random.randint(1, 10)
+        user_len = len(user_input.split(' '))
+        n_limit = random.randint(user_len // 2, user_len * 2)
         # (prediction is only the next words, not the whole text)
         prediction = self._predict_next_words(self.text, n_limit=n_limit)[len(self.text):].replace('\n', ' ')
 

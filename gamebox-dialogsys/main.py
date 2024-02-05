@@ -71,7 +71,8 @@ def main():
             tts('I\'m sorry, I didn\'t understand that. Please try again. (nlu_fallback))')
             continue
         # if the intent is wait, the program will sleep a little for the user to think
-        elif intent == 'wait':
+        # only if not in the word sequence game
+        elif intent == 'wait' and not isinstance(current_game, WordSequenceGame):
             # don't always say the same thing here
             tts(random.choice(['Okay. I will sleep a while and let you think.', 'I will give you some time to think.', 'I will wait a little.']))
             tts('And tell you when I\'m back.')
@@ -116,6 +117,6 @@ def main():
 
 if __name__ == "__main__":
     # set print mode to True to use stdin/stdout instead of asr/tts
-    set_print_mode(True)
+    set_print_mode(False)
     # start game
     main()
