@@ -109,13 +109,13 @@ def main():
                 # if the intent is not to stop the game or get the instructions,
                 # we can assume that the user wants to play the game
                 # if game.next_input is true, it is game over
-                if current_game.next_input(intent, entity):
+                if current_game.next_input(user_input, intent, entity):
                     break
 
 
 
 if __name__ == "__main__":
     # set print mode to True to use stdin/stdout instead of asr/tts
-    set_print_mode(False)
+    set_print_mode(True)
     # start game
     main()

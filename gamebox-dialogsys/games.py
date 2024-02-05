@@ -23,9 +23,9 @@ You can't repeat animals.
 The food game works the same way, but with food instead of animals.
 The word sequence or story game is different.
 You will start with as many words as you like.
-Then I will continue the text or sentence you started with as many words as I like.
+Then I will continue the text you started with as many words as I like.
 This way we try to tell a story together.
-The game does not really end, until you say so."""
+The game does not end, until you say so."""
 
 class Game:
     """abstract game class"""
@@ -33,7 +33,7 @@ class Game:
         """each game has to have an instruction set"""
         self.instructions = '' 
 
-    def next_input(self, intent, entity) -> bool:
+    def next_input(self, user_input, intent, entity) -> bool:
         """
         get the next input from the user, we only expect games that are played with one word (with entities)
 
@@ -93,7 +93,7 @@ You can't repeat foods."""
             self.used_foods.add(next_food)
             return next_food
 
-    def next_input(self, intent, entity) -> bool:
+    def next_input(self, user_input, intent, entity) -> bool:
         if intent != 'game_answer':
             tts('I\'m sorry, I didn\'t understand your food. Could you please repeat that?')
             # feeback is game_answer
@@ -200,7 +200,7 @@ You can't repeat animals."""
             self.used_animals.add(next_animal)
             return next_animal
 
-    def next_input(self, intent, entity) -> bool:
+    def next_input(self, user_input, intent, entity) -> bool:
         if intent != 'game_answer':
             tts('I\'m sorry, I didn\'t understand your animal. Could you please repeat that?')
             # feeback is game_answer
@@ -261,10 +261,70 @@ You can't repeat animals."""
 
 class WordSequenceGame(Game):
     
-        def __init__(self):
-            self.instructions = """You will start with as many words as you like.
-Then I will continue the text or sentence you started with as many words as I like.
+    def __init__(self):
+        self.instructions = """You will start with as many words as you like.
+Then I will continue the text you started with as many words as I like.
 This way we try to tell a story together.
 The game does not really end, until you say so."""
 
-        def next_input(self, intent, entity)
+        # set text to empty string
+        self.text = ''
+
+        # load the transformer models
+        self.tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+        self.model = GPT2LMHeadModel.from_pretrained('gpt2')
+
+        # start the game!
+        tts('Great! Let\'s play the word sequence game. You can start by saying as many words as you like. I will continue from there.')
+
+    def _predict_next_words(self, text: str, n_limit=1):
+        """
+        Generate text using a pre-trained GPT-2 model.
+
+        :param text: Input text to start generating from.
+        :param n_limit: Maximum number of words to generate. Note this limits the total
+                         output length including the input text.
+
+        :return: Generated text.
+        """
+
+
+        # Encode the input text
+        input_ids = self.tokenizer.encode(text, return_tensors='pt')
+
+        # Calculate the number of tokens in the input
+        input_tokens_count = input_ids.size(1)
+
+        # Generate text
+        attention_mask = torch.ones(input_ids.shape, device=input_ids.device) # Ensure attention is only on the input sequence
+        output_sequences = self.model.generate(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            max_length=input_tokens_count + n_limit,  # Adjust max_length for the desired number of additional tokens
+            temperature=1.0,
+            num_return_sequences=1,
+            pad_token_id=self.tokenizer.eos_token_id
+        )
+
+        # Decode the output
+        return self.tokenizer.decode(output_sequences[0], skip_special_tokens=True)
+
+
+    def next_input(self, user_input, intent, entity) -> bool:
+        # add the user's input to the text
+        self.text += ' ' + user_input
+
+        # make prediction about the next words
+        # generate a random amount of next words
+        n_limit = random.randint(1, 10)
+        # (prediction is only the next words, not the whole text)
+        prediction = self._predict_next_words(self.text, n_limit=n_limit)[len(self.text):].replace('\n', ' ')
+
+        # add the prediction to the text
+        self.text += prediction
+
+        # say the prediction and wait for next input
+        tts(prediction)
+
+        return False
+
