@@ -4,44 +4,10 @@
 dialogue manager for the gamebox bot
 """
 
-from utils import asr, tts, rasa_parse, set_print_mode
+from utils import asr, tts, rasa_parse, get_print_mode, set_print_mode
+from games import AnimalGame, FoodGame
+from time import sleep
 
-# define the games
-GAME_NONE = 0
-GAME_ANIMAL = 1
-GAME_FOOD = 2
-
-# the currently running game
-current_game = GAME_NONE
-
-
-class Game:
-    """abstract game class"""
-    def __init__(self):
-        """each game has to have an instruction set"""
-        self.instructions = '' 
-    
-    def init_game(self):
-        """initialize the game"""
-        pass
-
-    def next_input(self, entity):
-        """get the next input from the user, we only expect games that are played with one word (with entities)"""
-        pass
-
-class AnimalGame(Game):
-    def __init__(self):
-        self.instructions = """The game is simple.
-At the beginning of the game, I will decide upon a random letter.
-Then, you will have to name an animal that starts with that letter.
-Then, I will do the same.
-We will continue until one of us can't think of an animal anymore."""
-
-    def init_game(self):
-        
-
-    def next_input(self, entity):
-        tts('Please name an animal.')
 
 def confirm(text) -> bool:
     """
@@ -55,42 +21,69 @@ def confirm(text) -> bool:
     if not user_input:
         return False
 
-    intent, _ = rasa_parse(user_input)
-    if intent == 'affirm':
+    affirmations = ['yes', 'yeah', 'yep', 'yup', 'sure', 'ok', 'okay']
+    user_input = user_input.lower().strip()
+
+    # if one of the affirmations is contained in user_input, return True
+    if any([True for affirmation in affirmations if affirmation in user_input]):
         return True
 
     return False
 
 def main():
+    # the currently running game
+    current_game = None 
+
+    # give entry message
+    tts('Hello! I am the gamebox bot. I can play two games with you: the animal game and the food game. Which game would you like to play?')
+    
     # run an infinite loop (till stopped)
     while True:
         # get the user's input and
         # parse what he/she said to get the intent and entity
         user_input = asr()
         if not user_input:
-            tts('I\'m sorry, I didn\'t understand that. Please try again.')
+            # sleep some time before asking the user to repeat, to avoid asking too often
+            sleep(5)
+            tts('I\'m sorry, I didn\'t understand that. Please try again. (asr)')
             continue
 
         intent, entity = rasa_parse(user_input)
+
+        # if is in print mode print the intent and entity
+        if get_print_mode():
+            print(f'__{intent}, {entity}')
 
         # if the intent is None, the user's input could not be parsed
         # and there is an error with the server
         if not intent:
             break
 
-        if game == GAME_NONE:
-            tts('Please choose a game. You can play the animal game or the food game.')
+        # if entity is None, we can assume that the user's input is the entity
+        # (or at least treat it as such for the games)
+        if entity is None:
+            entity = user_input.lower().strip()
+
+        # if intent is NLU_FALLBACK, the user's input could not be parsed
+        # and we should ask the user to repeat
+        if intent == 'nlu_fallback':
+            tts('I\'m sorry, I didn\'t understand that. Please try again. (nlu_fallback))')
+            continue
+        # if the intent is wait, the program will sleep a little for the user to think
+        elif intent == 'wait':
+            tts('Okay. I will sleep a while and let you think.')
+            sleep(25)
+            tts('I\'m back. Have you thought of something?')
+            continue
+
+        if current_game == None:
             # if we are not currently running a game, we can start a new one
             if intent == 'choose_animal_game':
-                current_game = GAME_ANIMAL
-                game = AnimalGame()
-                game.init_game()
+                current_game = AnimalGame()
             elif intent == 'choose_food_game':
-                current_game = GAME_FOOD
-                game = FoodGame()
-                game.init_game()
+                current_game = FoodGame()
             else:
-                tts('Sorry, I didn\'t understand that. Please say again.')
+                tts('Sorry, I didn\'t understand that. Please say again which game you want to play.')
         else:
             # is in a game
             # check if the intent is to stop the game or get the instructions
@@ -98,15 +91,20 @@ def main():
                 if confirm('Do you really want to stop the game?'):
                     break
             elif intent == 'explain_rules':
-                tts(game.instructions)
+                tts(current_game.instructions)
             else:
                 # if the intent is not to stop the game or get the instructions,
                 # we can assume that the user wants to play the game
-                tts(game.next_input(entity))
+
+
+                # if game.next_input is true, it is game over
+                if current_game.next_input(intent, entity):
+                    break
+
 
 
 if __name__ == "__main__":
     # set print mode to True to use stdin/stdout instead of asr/tts
-    set_print_mode(True)
+    set_print_mode(False)
     # start game
     main()

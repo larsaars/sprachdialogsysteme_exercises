@@ -17,11 +17,16 @@ def set_print_mode(mode: bool):
     global print_mode
     print_mode = mode
 
+def get_print_mode() -> bool:
+    return print_mode
+
 def tts(text, language='en'):
     """Text to speech function using espeak"""
 
     if not text:
         return
+
+    global print_mode
 
     # print anyways what is being said
     print('<< ' + text)
@@ -39,6 +44,8 @@ def tts(text, language='en'):
 
 def asr() -> str:
     """perform automatic speech recognition using google speech recognition"""
+
+    global print_mode
 
     if print_mode:
         return input('>> ')
@@ -94,5 +101,5 @@ def rasa_parse(text):
         return intent, entity 
     else:
         # If the response code is not 200, print an error message
-        print('Rasa NLU server error')
+        tts('Rasa NLU server error')
         return None, None

@@ -30,5 +30,5 @@ venv/
 __pycache__/
 
 # dialogsys
-dialogsys/models/
-dialogsys/.rasa/
+gamebox-dialogsys/models/
+gamebox-dialogsys/.rasa/

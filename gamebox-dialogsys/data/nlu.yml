@@ -1,16 +1,6 @@
 version: "3.1"
 
 nlu:
-- intent: affirmation
-  examples: |
-    - yes
-    - okay
-    - absolutely
-       
-- intent: negation
-  examples: |
-    - no
-
 - intent: choose_animal_game
   examples: |
     - let's play the animal game
@@ -36,13 +26,36 @@ nlu:
     - I don't understand the game
     - can you please give me instructions how this game works
     - help
-
-
-- intent: game_answer 
+    - what are the rules of the games, i didn't understand them
+- intent: wait
   examples: |
+    - give me some time
+    - wait a little
+    - I have to think
+    - Can you hold on for a moment?
+    - Just a second, please
+    - Hold your horses
+    - Please wait patiently
+    - Let me ponder that
+    - Hold the line
+    - Give me a moment to consider
+    - I need a brief pause
+    - Let me gather my thoughts
+    - Take a breather
+    - I'm processing
+    - Give me a second to respond
+    - Pause for a second
+    - Hold tight
+    - Give me a while
+    - I'm contemplating
+    - Hold up, please
+
+- intent: game_answer
+  examples: |
+    - I think, okay, I'll say [muffin](answer)
     - I say [lion](answer)
-    - [elephant](answer)
-    - [dolphin](answer)
+    - Ok, I say [elephant](answer)
+    - Yes, [dolphin](answer)
     - [tiger](answer)
     - [lion](answer)
     - [penguin](answer)
@@ -61,7 +74,7 @@ nlu:
     - [owl](answer)
     - [chimpanzee](answer)
     - [rhinoceros](answer)
-    - How about [spaghetti](answer)
+    - How about [spaghetti](answer)?
     - [pizza](answer)
     - [sushi](answer)
     - [chocolate](answer)
@@ -81,3 +94,80 @@ nlu:
     - [blueberries](answer)
     - [cheese](answer)
     - [broccoli](answer)
+    - Let me think, I'll say [croissant](answer)
+    - How about [lasagna](answer)?
+    - [lobster](answer)
+    - [sushi](answer)
+    - Let me think, I'll say [blueberries](answer)
+    - [strawberries](answer)
+    - [carrots](answer)
+    - How about [bacon](answer)?
+    - [hamburger](answer)
+    - [french fries](answer)
+    - [macaroni](answer)
+    - [cabbage](answer)
+    - Let me think, I'll say [grapes](answer)
+    - How about [mango](answer)?
+    - [potato](answer)
+    - [raspberries](answer)
+    - [tomatoes](answer)
+    - [pumpkin](answer)
+    - [watermelon](answer)
+    - [spinach](answer)
+    - How about [cherries](answer)?
+    - [lettuce](answer)
+    - Let me think, I'll say [cauliflower](answer)
+    - [eggplant](answer)
+    - Alright, I'll go with [iguana](answer)
+    - Let's see... [zebra](answer)
+    - Hmm, how about [quokka](answer)?
+    - I've got one: [panda](answer)
+    - I'll choose [jellyfish](answer)
+    - Oh, [narwhal](answer) sounds good
+    - Going with [ostrich](answer) this time
+    - [unicorn](answer) is my pick
+    - [kangaroo](answer) is in the game
+    - Time for [octopus](answer)
+    - I'm going to say [walrus](answer)
+    - [lynx](answer) is my choice
+    - What about [gazelle](answer)?
+    - I'll add [raccoon](answer) to the list
+    - Got one: [elephant seal](answer)
+    - Going for [hawk](answer)
+    - How about [chameleon](answer)?
+    - I pick [yak](answer) this time
+    - Let's go with [turtle](answer)
+    - [parrot](answer) is in!
+    - Hmm, [dingo](answer) is my choice
+    - [toucan](answer) is the word
+    - Going for [platypus](answer)
+    - [oyster](answer) is my answer
+    - I'll choose [kookaburra](answer)
+    - What about [gnu](answer)?
+    - [hamster](answer) is in the game
+    - Let me think... [quail](answer)
+    - [vulture](answer) is my pick
+    - [woodpecker](answer) is the word
+    - [jaguar](answer) is my choice
+    - Time for [lemur](answer)
+    - [eland](answer) is in!
+    - I'll add [mongoose](answer) to the list
+    - Got one: [flamingo](answer)
+    - Going for [llama](answer)
+    - How about [iguana](answer)?
+    - I pick [dodo](answer) this time
+    - Let's go with [yak](answer)
+    - [quokka](answer) is in!
+    - Hmm, [gnat](answer) is my choice
+    - [wombat](answer) is the word
+    - Going for [vulture](answer)
+    - [quetzal](answer) is my answer
+    - I'll choose [axolotl](answer)
+    - What about [lemming](answer)?
+    - [pangolin](answer) is in the game
+    - Let me think... [tapir](answer)
+    - [urchin](answer) is my pick
+    - [yeti](answer) is the word
+    - [jellyfish](answer) is my choice
+    - My animal is [gorilla](answer)
+    - Okay, I'll say [duck](answer) is [duck](answer), okay?
