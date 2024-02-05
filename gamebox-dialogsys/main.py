@@ -5,8 +5,9 @@ dialogue manager for the gamebox bot
 """
 
 from utils import asr, tts, rasa_parse, get_print_mode, set_print_mode
-from games import AnimalGame, FoodGame
+from games import AnimalGame, FoodGame, WordSequenceGame, all_games_instructions
 from time import sleep
+import random
 
 
 def confirm(text) -> bool:
@@ -35,7 +36,7 @@ def main():
     current_game = None 
 
     # give entry message
-    tts('Hello! I am the gamebox bot. I can play two games with you: the animal game and the food game. Which game would you like to play?')
+    tts('Hello! I am the gamebox bot. I can play three games with you: the animal, food or word sequence game. Which game would you like to play?')
     
     # run an infinite loop (till stopped)
     while True:
@@ -71,8 +72,10 @@ def main():
             continue
         # if the intent is wait, the program will sleep a little for the user to think
         elif intent == 'wait':
-            tts('Okay. I will sleep a while and let you think.')
-            sleep(25)
+            # don't always say the same thing here
+            tts(random.choice(['Okay. I will sleep a while and let you think.', 'I will give you some time to think.', 'I will wait a little.']))
+            tts('And tell you when I\'m back.')
+            sleep(20)  # sleep for n secs
             tts('I\'m back. Have you thought of something?')
             continue
 
@@ -82,6 +85,13 @@ def main():
                 current_game = AnimalGame()
             elif intent == 'choose_food_game':
                 current_game = FoodGame()
+            elif intent == 'choose_word_sequence_game':
+                current_game = WordSequenceGame()
+            elif intent == 'explain_rules':
+                tts(all_games_instructions)
+            elif intent == 'end_game':
+                tts('Okay! Goodbye!')
+                break
             else:
                 tts('Sorry, I didn\'t understand that. Please say again which game you want to play.')
         else:
@@ -89,14 +99,15 @@ def main():
             # check if the intent is to stop the game or get the instructions
             if intent == 'end_game':
                 if confirm('Do you really want to stop the game?'):
-                    break
+                    current_game = None
+                    tts('Okay let\'s play another game. Which game would you like to play? We can play the animal, food or word sequence game.')
+                else:
+                    tts('Okay. I will continue the game.')
             elif intent == 'explain_rules':
                 tts(current_game.instructions)
             else:
                 # if the intent is not to stop the game or get the instructions,
                 # we can assume that the user wants to play the game
-
-
                 # if game.next_input is true, it is game over
                 if current_game.next_input(intent, entity):
                     break

@@ -9,7 +9,23 @@ from utils import asr, tts, rasa_parse
 import string
 import random
 import json
+from time import sleep
 
+import torch
+from transformers import GPT2Tokenizer, GPT2LMHeadModel
+
+
+all_games_instructions = """The animal game works as follows: At the beginning of the game, I will decide upon a random letter.
+Then, you will have to name an animal that starts with that letter.
+Then, I will do the same.
+We will continue until one of us can't think of an animal anymore.
+You can't repeat animals.
+The food game works the same way, but with food instead of animals.
+The word sequence or story game is different.
+You will start with as many words as you like.
+Then I will continue the text or sentence you started with as many words as I like.
+This way we try to tell a story together.
+The game does not really end, until you say so."""
 
 class Game:
     """abstract game class"""
@@ -29,7 +45,111 @@ class Game:
 
 
 class FoodGame(Game):
-    pass
+
+    def __init__(self):
+        self.instructions = """At the beginning of the game, I will decide upon a random letter.
+Then, you will have to name a food that starts with that letter.
+Then, I will do the same.
+We will continue until one of us can't think of an food anymore.
+You can't repeat foods."""
+        # generate a random letter
+        self.letter = random.choice(string.ascii_uppercase)
+
+        # load the list of foods starting with the letter
+        # from the json file
+        with open('./game_data/foods.json', 'r') as f:
+            self.foods = json.load(f)[self.letter]
+        # set the foods index counter to zero
+        self.foods_index = 0
+        # set of foods already used
+        self.used_foods = set()
+        # generate a random number between 3-10
+        # after which the computer will give up
+        self.give_up_at = random.randint(1, 10)
+        self.give_up_counter = 0
+
+        # get the first food to be said
+        first_food = self._get_next_food()
+        # start the game!
+        tts('Good choice! Let\'s play the food game. I will start.')
+        tts(f'I have chosen the letter {self.letter}. I begin by saying {first_food}. Now it\'s your turn!')
+
+
+    def _get_next_food(self):
+        # update food index
+        self.foods_index += 1
+        # check if we have reached the end of the list
+        if self.foods_index >= len(self.foods):
+            return None
+        
+        # else get the next food
+        next_food = self.foods[self.foods_index]
+
+        # if the next food has already been used, get the next one recursively
+        if next_food in self.used_foods:
+            return self._get_next_food()
+        else:
+            # add to list of used foods and return
+            self.used_foods.add(next_food)
+            return next_food
+
+    def next_input(self, intent, entity) -> bool:
+        if intent != 'game_answer':
+            tts('I\'m sorry, I didn\'t understand your food. Could you please repeat that?')
+            # feeback is game_answer
+        else:
+            # check if the food starts with the right letter
+            if entity[0].upper() == self.letter:
+                # check if food has already been used
+                if entity not in self.used_foods:
+                    self.used_foods.add(entity)
+                    # correct case!
+                    # btw, we do not really check if this is really an existing food
+                    # but we could do that with a web request
+                    # for now, we just assume that the user is honest
+                    # and knows the rules of the game
+
+                    # check as well if the computer gives up
+                    if self.give_up_counter >= self.give_up_at:
+                        tts(f'Good call! I give up. I can\'t think of any more foods starting with {self.letter}. You won!')
+                        return True  # return true to end the game
+                    else:
+                        # computer's turn
+                        next_food = self._get_next_food()
+
+                        # if is None, we have reached the end of the list
+                        if not next_food:
+                            tts(f'Good call! I can\'t think of any more foods starting with {self.letter}. You won!')
+                            return True
+                        else:
+                            # it is nice to have some randomness in the game
+                            # so that the computer does not always say the same thing
+                            # and the game is more fun
+                            # sleep a little bit sometimes to pretend to think
+                            if random.random() < 0.3:
+                                tts(random.choice(['Good one! I need some time to think',
+                                                   'Nice choice! I need some time to think',
+                                                   'Great! Wait...',
+                                                   'Ok...']))
+                                sleep(random.uniform(1, 4))
+                                tts(random.choice([f'Got something! I\'ll say {next_food}. Your turn.',
+                                                   f'Ok, I\'ll say {next_food}. Your turn.',
+                                                   f'Here we go! I\'ll say {next_food}. Your turn.',]))
+                            else:
+                                # don't always say the same thing
+                                tts(random.choice([f'Great! {entity} is a valid food. I\'ll say {next_food}. Your turn.',
+                                                   f'Nice choice! I\'ll say {next_food}. Your turn.',
+                                                   f'Good one! I\'ll say {next_food}.',
+                                                   f'You got it! I\'ll say {next_food}. Your turn.']))
+                            # increment the give up counter
+                            self.give_up_counter += 1
+
+                else:
+                    tts('This food has already been named! Try again.')
+            else:
+                tts(f'The food has to start with the letter {self.letter}. Please try again.')
+
+        return False  # return False to continue game
 
 class AnimalGame(Game):
 
@@ -47,7 +167,7 @@ You can't repeat animals."""
         with open('./game_data/animals.json', 'r') as f:
             self.animals = json.load(f)[self.letter]
         # set the animals index counter to zero
-        self.animals_index = -1
+        self.animals_index = 0
         # set of animals already used
         self.used_animals = set()
         # generate a random number between 3-10
@@ -55,9 +175,11 @@ You can't repeat animals."""
         self.give_up_at = random.randint(1, 10)
         self.give_up_counter = 0
 
+        # get the first animal to be said
+        first_animal = self._get_next_animal()
         # start the game!
         tts('Good choice! Let\'s play the animal game. I will start.')
-        tts(f'I have chosen the letter {self.letter}. Your turn.')
+        tts(f'I have chosen the letter {self.letter}. I begin by saying {first_animal}. Now it\'s your turn!')
 
 
     def _get_next_animal(self):
@@ -107,11 +229,25 @@ You can't repeat animals."""
                             tts(f'Good call! I can\'t think of any more animals starting with {self.letter}. You won!')
                             return True
                         else:
-                            # don't always say the same thing
-                            tts(random.choice([f'Great! {entity} is a valid animal. I\'ll say {next_animal}. Your turn.',
-                                               f'Nice choice! I\'ll say {next_animal}. Your turn.',
-                                               f'Good one! I\'ll say {next_animal}.',
-                                               f'You got it! I\'ll say {next_animal}. Your turn.']))
+                            # it is nice to have some randomness in the game
+                            # so that the computer does not always say the same thing
+                            # and the game is more fun
+                            # sleep a little bit sometimes to pretend to think
+                            if random.random() < 0.3:
+                                tts(random.choice(['Good one! I need some time to think',
+                                                   'Nice choice! I need some time to think',
+                                                   'Great! Wait...',
+                                                   'Ok...']))
+                                sleep(random.uniform(1, 4))
+                                tts(random.choice([f'Got something! I\'ll say {next_animal}. Your turn.',
+                                                   f'Ok, I\'ll say {next_animal}. Your turn.',
+                                                   f'Here we go! I\'ll say {next_animal}. Your turn.',]))
+                            else:
+                                # don't always say the same thing
+                                tts(random.choice([f'Great! {entity} is a valid animal. I\'ll say {next_animal}. Your turn.',
+                                                   f'Nice choice! I\'ll say {next_animal}. Your turn.',
+                                                   f'Good one! I\'ll say {next_animal}.',
+                                                   f'You got it! I\'ll say {next_animal}. Your turn.']))
                             # increment the give up counter
                             self.give_up_counter += 1
 
@@ -121,3 +257,14 @@ You can't repeat animals."""
                 tts(f'The animal has to start with the letter {self.letter}. Please try again.')
 
         return False  # return False to continue game
+
+
+class WordSequenceGame(Game):
+    
+        def __init__(self):
+            self.instructions = """You will start with as many words as you like.
+Then I will continue the text or sentence you started with as many words as I like.
+This way we try to tell a story together.
+The game does not really end, until you say so."""
+
+        def next_input(self, intent, entity)

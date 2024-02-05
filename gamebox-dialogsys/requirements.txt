@@ -1,0 +1,4 @@
+SpeechRecognition
+rasa
+torch
+transformers

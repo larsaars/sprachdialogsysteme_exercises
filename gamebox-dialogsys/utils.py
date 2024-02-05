@@ -36,7 +36,7 @@ def tts(text, language='en'):
         return
 
     # use espeak to convert text to speech
-    command = f'espeak -v {language} -s 150 "{text}" --stdout | aplay'
+    command = f'espeak -v {language} -s 150 "{text}"'
     
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     process.wait()

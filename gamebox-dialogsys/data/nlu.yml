@@ -12,6 +12,13 @@ nlu:
     - let's play the food game
     - food game
     - I would like to play the food game now
+- intent: choose_word_sequence_game
+  examples: |
+    - let's play the word sequence game
+    - word sequence game
+    - I would like to play the word sequence game now
+    - I would like to play the story game.
+    - story game
 
 - intent: end_game
   examples: |
@@ -19,6 +26,8 @@ nlu:
     - let's end this game
     - let's stop playing
     - I have had enough
+    - I don't want to play anymore
+    - I think I've had enough
 
 - intent: explain_rules
   examples: |
@@ -27,11 +36,14 @@ nlu:
     - can you please give me instructions how this game works
     - help
     - what are the rules of the games, i didn't understand them
+    - can you explain the games please
+
 - intent: wait
   examples: |
     - give me some time
     - wait a little
     - I have to think
+    - I have to think about it
     - Can you hold on for a moment?
     - Just a second, please
     - Hold your horses
@@ -52,6 +64,9 @@ nlu:
 
 - intent: game_answer
   examples: |
+    - I thought about maybe [tucan](answer)
+    - Yes, I have thought about [bear](answer)
+    - [lion](answer) [lion](answer) is my animal
     - I think, okay, I'll say [muffin](answer)
     - I say [lion](answer)
     - Ok, I say [elephant](answer)
@@ -171,3 +186,48 @@ nlu:
     - [jellyfish](answer) is my choice
     - My animal is [gorilla](answer)
     - Okay, I'll say [duck](answer) is [duck](answer), okay?
+    - I thought about maybe [tucan](answer)
+    - Yes, I have thought about [bear](answer)
+    - [lion](answer) [lion](answer) is my animal
+    - [penguin](answer) seems like a good choice
+    - [kangaroo](answer) is what I'm going with
+    - How about [elephant](answer) this time?
+    - [flamingo](answer) is my decision
+    - [zebra](answer) is what I'm thinking
+    - Let's go with [koala](answer)
+    - [giraffe](answer) is my pick
+    - [cheetah](answer) is my choice
+    - [narwhal](answer) is what I came up with
+    - [ostrich](answer) is my final answer
+    - [panda](answer) is the word
+    - [iguana](answer) is the animal
+    - [dolphin](answer) is the one
+    - [octopus](answer) sounds good
+    - [bald eagle](answer) is my selection
+    - [komodo dragon](answer) is my pick
+    - [red fox](answer) is my answer
+    - [hippopotamus](answer) is my decision
+    - [zebra](answer) is my animal of choice
+    - [owl](answer) is my final decision
+    - [chimpanzee](answer) is what I thought of
+    - [rhinoceros](answer) is what I'm going with
+    - [spaghetti](answer) is the word
+    - [pizza](answer) sounds good to me
+    - [sushi](answer) is what I'm thinking
+    - [chocolate](answer) is my choice
+    - [burgers](answer) is my selection
+    - [tacos](answer) is my answer
+    - [ice cream](answer) is my decision
+    - [salad](answer) is what I thought of
+    - [steak](answer) is my final choice
+    - [chicken nuggets](answer) is what I'm going with
+    - [pancakes](answer) is my final answer
+    - [ramen](answer) is the word
+    - [pineapple](answer) sounds good
+    - [watermelon](answer) is what I'm thinking
+    - [avocado](answer) is my choice
+    - [popcorn](answer) is my selection
+    - [cucumber](answer) is my answer
+    - [blueberries](answer) is my decision
+    - [cheese](answer) is what I thought of
+    - [broccoli](answer) is my choice
